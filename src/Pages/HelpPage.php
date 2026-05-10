@@ -1,8 +1,8 @@
 <?php
 
-namespace ForwardFi\Pages;
+namespace SilverStripeHelpCentre\Pages;
 
-use ForwardFi\Blocks\HelpContentBlock;
+use SilverStripeHelpCentre\Blocks\HelpContentBlock;
 use Page;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\Model\List\ArrayList;
@@ -10,7 +10,7 @@ use SilverStripe\ORM\DataList;
 
 class HelpPage extends Page
 {
-    private static string $table_name    = 'ForwardFi_HelpPage';
+    private static string $table_name    = 'HelpCentre_HelpPage';
     private static string $singular_name = 'Help Page';
     private static string $plural_name   = 'Help Pages';
     private static string $description   = 'A documentation page with structured content blocks.';
@@ -49,9 +49,9 @@ class HelpPage extends Page
             return $nav;
         }
 
-        foreach ($helpDesk->Children()->filter('ClassName', HelpSection::class) as $section) {
+        foreach ($helpDesk->Children()->filter('ClassName', HelpSection::class)->sort('Sort') as $section) {
             $pages = ArrayList::create();
-            foreach ($section->Children()->filter('ClassName', HelpPage::class) as $page) {
+            foreach ($section->Children()->filter('ClassName', HelpPage::class)->sort('Sort') as $page) {
                 $pages->push(ArrayData::create([
                     'Title'         => $page->MenuTitle,
                     'Link'          => $page->Link(),
@@ -75,9 +75,14 @@ class HelpPage extends Page
      */
     public function HelpContentBlocks(): DataList
     {
+        $area = $this->ElementalArea();
+        if (!$area || !$area->exists()) {
+            return HelpContentBlock::get()->where('1 = 0');
+        }
+
         return HelpContentBlock::get()->filter([
-            'ParentID' => $this->ElementalArea()->ID,
-        ]);
+            'ParentID' => $area->ID,
+        ])->sort('Sort');
     }
 
     /**
@@ -91,8 +96,8 @@ class HelpPage extends Page
         }
 
         $pages = [];
-        foreach ($helpDesk->Children()->filter('ClassName', HelpSection::class) as $section) {
-            foreach ($section->Children()->filter('ClassName', HelpPage::class) as $page) {
+        foreach ($helpDesk->Children()->filter('ClassName', HelpSection::class)->sort('Sort') as $section) {
+            foreach ($section->Children()->filter('ClassName', HelpPage::class)->sort('Sort') as $page) {
                 $pages[] = $page;
             }
         }

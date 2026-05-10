@@ -1,12 +1,12 @@
 <?php
 
-namespace ForwardFi\Pages;
+namespace SilverStripeHelpCentre\Pages;
 
 use Page;
 
 class HelpSection extends Page
 {
-    private static string $table_name    = 'ForwardFi_HelpSection';
+    private static string $table_name    = 'HelpCentre_HelpSection';
     private static string $singular_name = 'Help Section';
     private static string $plural_name   = 'Help Sections';
     private static string $description   = 'A section grouping related help pages.';

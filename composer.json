@@ -1,8 +1,14 @@
 {
   "name": "tipbr/silverstripe-help-centre",
-  "description": "Silverstripe help centre pages, block, and content population task",
+  "description": "Reusable Silverstripe help centre pages and Elemental content block",
   "type": "silverstripe-vendormodule",
   "license": "BSD-3-Clause",
+  "keywords": [
+    "silverstripe",
+    "help-centre",
+    "cms",
+    "elemental"
+  ],
   "require": {
     "php": "^8.3",
     "silverstripe/framework": "^6",
@@ -11,14 +17,11 @@
   },
   "autoload": {
     "psr-4": {
-      "ForwardFi\\Pages\\": "src/Pages/",
-      "ForwardFi\\Blocks\\": "src/Blocks/",
-      "ForwardFi\\Tasks\\": "src/Tasks/"
+      "SilverStripeHelpCentre\\Pages\\": "src/Pages/",
+      "SilverStripeHelpCentre\\Blocks\\": "src/Blocks/"
     }
   },
   "extra": {
     "expose": []
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  }
 }

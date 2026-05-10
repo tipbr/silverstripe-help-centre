@@ -12,7 +12,7 @@
         </a>
     </h2>
     <% if $Content %>
-        <div class="text-foreground/90 leading-relaxed [&_a]:text-primary [&_a:hover]:underline [&_blockquote]:my-4 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_code]:rounded-sm [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h4]:mt-6 [&_h4]:mb-2 [&_h4]:text-base [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-4 [&_pre]:mb-4 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:bg-brand-midnight [&_pre]:p-4 [&_pre]:text-brand-cream [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6">
+        <div class="text-foreground/90 leading-relaxed [&_a]:text-primary [&_a:hover]:underline [&_blockquote]:my-4 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_code]:rounded-sm [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h4]:mt-6 [&_h4]:mb-2 [&_h4]:text-base [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-4 [&_pre]:mb-4 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:bg-muted [&_pre]:p-4 [&_pre]:text-foreground [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6">
             $Content
         </div>
     <% end_if %>

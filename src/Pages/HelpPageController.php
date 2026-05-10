@@ -1,6 +1,6 @@
 <?php
 
-namespace ForwardFi\Pages;
+namespace SilverStripeHelpCentre\Pages;
 
 use PageController;
 

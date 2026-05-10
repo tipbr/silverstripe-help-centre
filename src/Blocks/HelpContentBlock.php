@@ -1,6 +1,6 @@
 <?php
 
-namespace ForwardFi\Blocks;
+namespace SilverStripeHelpCentre\Blocks;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\FieldList;
@@ -10,7 +10,7 @@ use SilverStripe\View\Parsers\URLSegmentFilter;
 
 class HelpContentBlock extends BaseElement
 {
-    private static string $table_name    = 'ForwardFi_HelpContentBlock';
+    private static string $table_name    = 'HelpCentre_HelpContentBlock';
     private static string $singular_name = 'Help Content Block';
     private static string $icon          = 'font-icon-block-content';
     private static string $description   = 'A titled content section with anchor link. Restricted to Help pages.';

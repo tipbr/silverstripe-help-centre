@@ -1,6 +1,6 @@
 <?php
 
-namespace ForwardFi\Pages;
+namespace SilverStripeHelpCentre\Pages;
 
 use PageController;
 use SilverStripe\Control\HTTPResponse;
@@ -11,6 +11,7 @@ class HelpDeskController extends PageController
     {
         $first = $this->data()->Children()
             ->filter('ClassName', HelpSection::class)
+            ->sort('Sort')
             ->first();
 
         if ($first) {

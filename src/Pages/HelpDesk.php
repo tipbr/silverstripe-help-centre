@@ -1,12 +1,12 @@
 <?php
 
-namespace ForwardFi\Pages;
+namespace SilverStripeHelpCentre\Pages;
 
 use Page;
 
 class HelpDesk extends Page
 {
-    private static string $table_name    = 'ForwardFi_HelpDesk';
+    private static string $table_name    = 'HelpCentre_HelpDesk';
     private static string $singular_name = 'Help Desk';
     private static string $plural_name   = 'Help Desks';
     private static string $description   = 'Top-level help centre landing page.';
