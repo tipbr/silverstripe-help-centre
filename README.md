@@ -1,25 +1,18 @@
 # Silverstripe Help Centre
 
-A reusable Silverstripe module for building help centre content using a simple page hierarchy and Elemental blocks.
+Reusable Silverstripe 6 module for documentation/help-centre sites using page types plus Elemental blocks.
 
 ## Features
 
-- `HelpDesk` top-level landing page type
-- `HelpSection` grouping page type with optional landing/overview content
-- `HelpPage` content page type with:
-  - sidebar navigation
-  - on-page table of contents
-  - previous/next navigation
-  - article metadata (last updated, author, reading time, status)
-  - tags/topics and related articles
-  - "Was this helpful?" feedback capture with optional comment
-- `HelpContentBlock` Elemental block type with anchor links
-- `HelpFaqBlock` Elemental block type for FAQ/accordion items
-- `HelpCalloutBlock` Elemental block type for admonitions (`Info`, `Tip`, `Warning`)
-- Google Analytics event hooks for:
-  - article views (`help_article_view`)
-  - search terms (`help_search`)
-  - feedback submissions (`help_feedback_submitted`)
+- Page types: `HelpDesk` → `HelpSection` → `HelpPage`
+- Article navigation: sidebar, breadcrumbs, in-page ToC, previous/next links
+- Optional article metadata: author, status, reading time, topics, related articles
+- Feedback endpoint (`POST /feedback`) with CSRF validation and comment length limit
+- Elemental blocks:
+  - `HelpContentBlock` (section + anchor)
+  - `HelpFaqBlock` (FAQ item)
+  - `HelpCalloutBlock` (`Info`, `Tip`, `Warning`)
+- Optional Google Analytics hooks (`help_article_view`, `help_search`, `help_feedback_submitted`)
 
 ## Requirements
 
@@ -30,28 +23,20 @@ A reusable Silverstripe module for building help centre content using a simple p
 
 ## Installation
 
-Install with Composer:
-
 ```bash
 composer require tipbr/silverstripe-help-centre
-```
-
-Then run a dev/build:
-
-```bash
 vendor/bin/sake dev/build flush=all
 ```
 
 ## Usage
 
-1. In the CMS, create a `Help Desk` page at the site root.
-2. Add one or more `Help Section` pages under it.
+1. Create a `Help Desk` page at the site root.
+2. Add `Help Section` pages under it.
 3. Add `Help Page` pages under each section.
-4. Add Elemental blocks to each help page (`Help Content`, `Help FAQ`, `Help Callout`).
-5. Configure optional article metadata and topics on each help page in the `Help Metadata` CMS tab.
-6. Add explicit related articles in the `Help Metadata` tab (topic overlap is also used for discovery).
+4. Add Help blocks (`Help Content`, `Help FAQ`, `Help Callout`) to each article.
+5. Configure metadata and related articles in the `Help Metadata` tab.
 
-Templates are provided at:
+## Templates to override
 
 - `templates/SilverStripeHelpCentre/Pages/Layout/HelpPage.ss`
 - `templates/SilverStripeHelpCentre/Pages/Layout/HelpSection.ss`
@@ -59,18 +44,15 @@ Templates are provided at:
 - `templates/SilverStripeHelpCentre/Blocks/HelpFaqBlock.ss`
 - `templates/SilverStripeHelpCentre/Blocks/HelpCalloutBlock.ss`
 
-Override them in your project or theme as needed.
-
 ## Namespaces
-
-This module uses the following PSR-4 namespaces:
 
 - `SilverStripeHelpCentre\Pages\`
 - `SilverStripeHelpCentre\Blocks\`
+- `SilverStripeHelpCentre\Model\`
 
-## Notes for Existing Installations
+## Upgrade note
 
-If you are upgrading from an internal or pre-publish version that used different namespace or table-name prefixes, run `dev/build` and review generated database migration changes before deploying.
+If upgrading from an internal/pre-publish version with different namespaces or table prefixes, run `dev/build` and review migration SQL before deployment.
 
 ## License
 
