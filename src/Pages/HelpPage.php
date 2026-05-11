@@ -4,9 +4,16 @@ namespace SilverStripeHelpCentre\Pages;
 
 use SilverStripeHelpCentre\Blocks\HelpContentBlock;
 use Page;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\ListboxField;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\Forms\TextField;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataList;
+use SilverStripeHelpCentre\Model\HelpPageFeedback;
 
 class HelpPage extends Page
 {
@@ -16,12 +23,50 @@ class HelpPage extends Page
     private static string $description   = 'A documentation page with structured content blocks.';
     private static string $icon_class    = 'font-icon-list';
 
-    private static array $db = [];
+    private static array $db = [
+        'AuthorName' => 'Varchar(255)',
+        'ReadingTimeMinutes' => 'Int',
+        'ArticleStatus' => "Enum('Draft,Reviewed,Published,Deprecated','Published')",
+        'Topics' => 'Text',
+    ];
 
     private static array $allowed_children = [];
     private static array $allowed_parents  = [HelpSection::class];
+
+    private static array $many_many = [
+        'RelatedArticles' => HelpPage::class,
+    ];
+
+    private static array $has_many = [
+        'FeedbackSubmissions' => HelpPageFeedback::class,
+    ];
     
     private static bool $can_be_root = false;
+
+    public function getCMSFields(): FieldList
+    {
+        $fields = parent::getCMSFields();
+        $fields->addFieldsToTab('Root.HelpMetadata', [
+            TextField::create('AuthorName', 'Author'),
+            NumericField::create('ReadingTimeMinutes', 'Reading time (minutes)'),
+            DropdownField::create('ArticleStatus', 'Status', [
+                'Draft' => 'Draft',
+                'Reviewed' => 'Reviewed',
+                'Published' => 'Published',
+                'Deprecated' => 'Deprecated',
+            ]),
+            TextareaField::create('Topics', 'Tags / Topics')
+                ->setDescription('Comma-separated topics, e.g. billing, setup, api'),
+        ]);
+
+        $relatedSource = self::get()->exclude('ID', (int) $this->ID)->sort('Title')->map('ID', 'Title')->toArray();
+        $fields->addFieldToTab(
+            'Root.HelpMetadata',
+            ListboxField::create('RelatedArticles', 'Related articles', $relatedSource)
+        );
+
+        return $fields;
+    }
 
     /**
      * Return the root HelpDesk ancestor, or null if structure is unexpected.
@@ -125,5 +170,90 @@ class HelpPage extends Page
             }
         }
         return null;
+    }
+
+    public function TopicList(): array
+    {
+        if (!$this->Topics) {
+            return [];
+        }
+        $parts = preg_split('/[,\\n]+/', (string) $this->Topics) ?: [];
+        $topics = [];
+        foreach ($parts as $part) {
+            $topic = trim((string) $part);
+            if ($topic !== '') {
+                $topics[] = $topic;
+            }
+        }
+        return array_values(array_unique($topics));
+    }
+
+    public function TopicItems(): ArrayList
+    {
+        $list = ArrayList::create();
+        foreach ($this->TopicList() as $topic) {
+            $list->push(ArrayData::create(['Title' => $topic]));
+        }
+        return $list;
+    }
+
+    public function RelatedHelpPages(): ArrayList
+    {
+        $limit = 4;
+        $items = ArrayList::create();
+
+        foreach ($this->RelatedArticles()->exclude('ID', $this->ID)->limit($limit) as $page) {
+            $items->push($page);
+        }
+
+        if ($items->count() >= $limit) {
+            return $items;
+        }
+
+        $currentTopics = $this->TopicList();
+        if (!$currentTopics) {
+            return $items;
+        }
+
+        $existingIds = [];
+        foreach ($items as $item) {
+            $existingIds[] = (int) $item->ID;
+        }
+        $existingIds[] = (int) $this->ID;
+
+        $scores = [];
+        foreach (self::get()->exclude('ID', $existingIds) as $candidate) {
+            $overlap = array_intersect($currentTopics, $candidate->TopicList());
+            if ($overlap) {
+                $scores[] = [
+                    'score' => count($overlap),
+                    'page' => $candidate,
+                ];
+            }
+        }
+
+        usort($scores, static fn(array $a, array $b) => $b['score'] <=> $a['score']);
+        foreach ($scores as $scored) {
+            if ($items->count() >= $limit) {
+                break;
+            }
+            $items->push($scored['page']);
+        }
+
+        return $items;
+    }
+
+    public function ReadingTimeLabel(): string
+    {
+        $minutes = (int) $this->ReadingTimeMinutes;
+        if ($minutes <= 0) {
+            $text = strip_tags((string) $this->Title);
+            foreach ($this->HelpContentBlocks() as $block) {
+                $text .= ' ' . strip_tags((string) $block->Content);
+            }
+            $wordCount = str_word_count($text);
+            $minutes = max(1, (int) ceil($wordCount / 200));
+        }
+        return sprintf('%d min read', $minutes);
     }
 }

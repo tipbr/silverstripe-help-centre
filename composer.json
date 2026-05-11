@@ -18,7 +18,8 @@
   "autoload": {
     "psr-4": {
       "SilverStripeHelpCentre\\Pages\\": "src/Pages/",
-      "SilverStripeHelpCentre\\Blocks\\": "src/Blocks/"
+      "SilverStripeHelpCentre\\Blocks\\": "src/Blocks/",
+      "SilverStripeHelpCentre\\Model\\": "src/Model/"
     }
   },
   "extra": {
