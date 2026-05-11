@@ -19,6 +19,7 @@ class HelpPage extends Page
 {
     private const int DEFAULT_RELATED_ARTICLE_LIMIT = 4;
     private const int DEFAULT_WORDS_PER_MINUTE = 200;
+    private ?string $readingTimeLabelCache = null;
 
     private static string $table_name    = 'HelpCentre_HelpPage';
     private static string $singular_name = 'Help Page';
@@ -180,7 +181,7 @@ class HelpPage extends Page
         if (!$this->Topics) {
             return [];
         }
-        $parts = preg_split('/[,\\n]+/', (string) $this->Topics) ?: [];
+        $parts = preg_split('/[,\\r\\n]+/', (string) $this->Topics) ?: [];
         $topics = [];
         foreach ($parts as $part) {
             $topic = trim((string) $part);
@@ -248,6 +249,10 @@ class HelpPage extends Page
 
     public function ReadingTimeLabel(): string
     {
+        if ($this->readingTimeLabelCache !== null) {
+            return $this->readingTimeLabelCache;
+        }
+
         $minutes = (int) $this->ReadingTimeMinutes;
         if ($minutes <= 0) {
             $text = strip_tags((string) $this->Title);
@@ -257,6 +262,7 @@ class HelpPage extends Page
             $wordCount = str_word_count($text);
             $minutes = max(1, (int) ceil($wordCount / self::DEFAULT_WORDS_PER_MINUTE));
         }
-        return sprintf('%d min read', $minutes);
+        $this->readingTimeLabelCache = sprintf('%d min read', $minutes);
+        return $this->readingTimeLabelCache;
     }
 }

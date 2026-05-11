@@ -41,7 +41,7 @@
 (function () {
     if (typeof window.gtag !== 'function') return;
 
-    var params = new URLSearchParams(window.location.search || '');
+    var params = new URLSearchParams(window.location.search);
     var query = params.get('q') || params.get('query') || params.get('search');
     if (query) {
         window.gtag('event', 'help_search', { search_term: query });

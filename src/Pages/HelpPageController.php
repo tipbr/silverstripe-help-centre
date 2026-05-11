@@ -35,10 +35,15 @@ class HelpPageController extends PageController
         $feedback->Comment = trim((string) $request->postVar('Comment'));
         $feedback->write();
 
-        $response = HTTPResponse::create(json_encode([
+        $payload = json_encode([
             'ok' => true,
             'helpful' => $feedback->Helpful,
-        ]), 200);
+        ]);
+        if ($payload === false) {
+            return HTTPResponse::create('Failed to encode response', 500);
+        }
+
+        $response = HTTPResponse::create($payload, 200);
         $response->addHeader('Content-Type', 'application/json');
         return $response;
     }
