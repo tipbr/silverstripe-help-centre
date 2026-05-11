@@ -22,6 +22,15 @@
       "SilverStripeHelpCentre\\Model\\": "src/Model/"
     }
   },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "silverstripe/vendor-plugin": true
+    },
+    "platform": {
+      "php": "8.3.31"
+    }
+  },
   "extra": {
     "expose": []
   }
