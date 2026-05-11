@@ -151,7 +151,7 @@
                         </label>
                     </div>
                     <label for="js-help-feedback-comment" class="mb-1 block text-sm text-muted-foreground">Optional comment</label>
-                    <textarea id="js-help-feedback-comment" name="Comment" rows="3" class="mb-3 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"></textarea>
+                    <textarea id="js-help-feedback-comment" name="Comment" rows="3" maxlength="2000" class="mb-3 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"></textarea>
                     <button type="submit" class="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm hover:bg-accent">Submit feedback</button>
                     <p id="js-help-feedback-message" class="mt-3 text-sm" aria-live="polite"></p>
                 </form>
@@ -190,6 +190,9 @@
         overlay.classList.remove('hidden');
         toggle.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
+        if (close) {
+            close.focus();
+        }
     }
 
     function closeSidebar() {
@@ -197,11 +200,19 @@
         overlay.classList.add('hidden');
         toggle.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        if (toggle) {
+            toggle.focus();
+        }
     }
 
     if (toggle)  toggle.addEventListener('click', openSidebar);
     if (close)   close.addEventListener('click', closeSidebar);
     if (overlay) overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && sidebar && !sidebar.classList.contains('-translate-x-full')) {
+            closeSidebar();
+        }
+    });
 
     // Highlight the active ToC link as the user scrolls
     var tocLinks = document.querySelectorAll('[data-help-toc-link]');

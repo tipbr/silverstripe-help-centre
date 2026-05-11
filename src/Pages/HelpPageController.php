@@ -10,6 +10,8 @@ use SilverStripeHelpCentre\Model\HelpPageFeedback;
 
 class HelpPageController extends PageController
 {
+    private const int MAX_COMMENT_LENGTH = 2000;
+
     private static array $allowed_actions = [
         'feedback',
     ];
@@ -29,10 +31,16 @@ class HelpPageController extends PageController
             return HTTPResponse::create('Invalid feedback value', 400);
         }
 
+        $comment = strip_tags((string) $request->postVar('Comment'));
+        $comment = trim($comment);
+        if (strlen($comment) > self::MAX_COMMENT_LENGTH) {
+            $comment = substr($comment, 0, self::MAX_COMMENT_LENGTH);
+        }
+
         $feedback = HelpPageFeedback::create();
         $feedback->HelpPageID = (int) $this->data()->ID;
         $feedback->Helpful = $helpful === 'yes' ? 'Yes' : 'No';
-        $feedback->Comment = trim((string) $request->postVar('Comment'));
+        $feedback->Comment = $comment;
         $feedback->write();
 
         $payload = json_encode([

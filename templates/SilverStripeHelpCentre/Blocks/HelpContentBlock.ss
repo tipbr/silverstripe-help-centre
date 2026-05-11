@@ -2,7 +2,7 @@
     <h2 class="group mb-4 flex items-center gap-2 text-2xl font-semibold text-foreground">
         <span aria-hidden="true" class="h-0 w-0 overflow-hidden"></span>
         $Title
-        <a href="#$Anchor.ATT" class="shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-primary" aria-label="Link to $Title.ATT">
+        <a href="#$Anchor.ATT" class="shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 hover:text-primary" aria-label="Link to $Title.ATT">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
