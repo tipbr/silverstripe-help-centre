@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripeHelpCentre\Pages;
+namespace Tipbr\HelpCentre\Pages;
 
 use Page;
 

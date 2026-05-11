@@ -1,9 +1,9 @@
 <?php
 
-namespace SilverStripeHelpCentre\Model;
+namespace Tipbr\HelpCentre\Model;
 
 use SilverStripe\ORM\DataObject;
-use SilverStripeHelpCentre\Pages\HelpPage;
+use Tipbr\HelpCentre\Pages\HelpPage;
 
 class HelpPageFeedback extends DataObject
 {
