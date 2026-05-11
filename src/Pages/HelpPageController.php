@@ -33,10 +33,8 @@ class HelpPageController extends PageController
 
         $comment = strip_tags((string) $request->postVar('Comment'));
         $comment = trim($comment);
-        if (function_exists('mb_strlen') && function_exists('mb_substr')) {
-            if (mb_strlen($comment) > self::MAX_COMMENT_LENGTH) {
-                $comment = mb_substr($comment, 0, self::MAX_COMMENT_LENGTH);
-            }
+        if (function_exists('mb_strlen') && function_exists('mb_substr') && mb_strlen($comment) > self::MAX_COMMENT_LENGTH) {
+            $comment = mb_substr($comment, 0, self::MAX_COMMENT_LENGTH);
         } elseif (strlen($comment) > self::MAX_COMMENT_LENGTH) {
             $comment = substr($comment, 0, self::MAX_COMMENT_LENGTH);
         }

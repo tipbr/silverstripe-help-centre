@@ -210,6 +210,7 @@
     if (overlay) overlay.addEventListener('click', closeSidebar);
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && sidebar && !sidebar.classList.contains('-translate-x-full')) {
+            event.preventDefault();
             closeSidebar();
         }
     });
