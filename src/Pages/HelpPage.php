@@ -17,6 +17,9 @@ use SilverStripeHelpCentre\Model\HelpPageFeedback;
 
 class HelpPage extends Page
 {
+    private const int DEFAULT_RELATED_ARTICLE_LIMIT = 4;
+    private const int DEFAULT_WORDS_PER_MINUTE = 200;
+
     private static string $table_name    = 'HelpCentre_HelpPage';
     private static string $singular_name = 'Help Page';
     private static string $plural_name   = 'Help Pages';
@@ -199,7 +202,7 @@ class HelpPage extends Page
 
     public function RelatedHelpPages(): ArrayList
     {
-        $limit = 4;
+        $limit = self::DEFAULT_RELATED_ARTICLE_LIMIT;
         $items = ArrayList::create();
 
         foreach ($this->RelatedArticles()->exclude('ID', $this->ID)->limit($limit) as $page) {
@@ -252,7 +255,7 @@ class HelpPage extends Page
                 $text .= ' ' . strip_tags((string) $block->Content);
             }
             $wordCount = str_word_count($text);
-            $minutes = max(1, (int) ceil($wordCount / 200));
+            $minutes = max(1, (int) ceil($wordCount / self::DEFAULT_WORDS_PER_MINUTE));
         }
         return sprintf('%d min read', $minutes);
     }
