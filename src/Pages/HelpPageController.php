@@ -1,12 +1,12 @@
 <?php
 
-namespace SilverStripeHelpCentre\Pages;
+namespace Tipbr\HelpCentre\Pages;
 
 use PageController;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Security\SecurityToken;
-use SilverStripeHelpCentre\Model\HelpPageFeedback;
+use Tipbr\HelpCentre\Model\HelpPageFeedback;
 
 class HelpPageController extends PageController
 {

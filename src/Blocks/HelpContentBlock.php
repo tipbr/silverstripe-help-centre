@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripeHelpCentre\Blocks;
+namespace Tipbr\HelpCentre\Blocks;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\FieldList;

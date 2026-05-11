@@ -1,8 +1,8 @@
 <?php
 
-namespace SilverStripeHelpCentre\Pages;
+namespace Tipbr\HelpCentre\Pages;
 
-use SilverStripeHelpCentre\Blocks\HelpContentBlock;
+use Tipbr\HelpCentre\Blocks\HelpContentBlock;
 use Page;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
@@ -13,7 +13,7 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataList;
-use SilverStripeHelpCentre\Model\HelpPageFeedback;
+use Tipbr\HelpCentre\Model\HelpPageFeedback;
 
 class HelpPage extends Page
 {
