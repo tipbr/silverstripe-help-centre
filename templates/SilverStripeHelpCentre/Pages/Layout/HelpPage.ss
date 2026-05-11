@@ -151,7 +151,7 @@
                         </label>
                     </div>
                     <label for="js-help-feedback-comment" class="mb-1 block text-sm text-muted-foreground">Optional comment</label>
-                    <textarea id="js-help-feedback-comment" name="Comment" rows="3" maxlength="2000" class="mb-3 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"></textarea>
+                    <textarea id="js-help-feedback-comment" name="Comment" rows="3" maxlength="$CommentMaxLength" class="mb-3 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"></textarea>
                     <button type="submit" class="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm hover:bg-accent">Submit feedback</button>
                     <p id="js-help-feedback-message" class="mt-3 text-sm" aria-live="polite"></p>
                 </form>
