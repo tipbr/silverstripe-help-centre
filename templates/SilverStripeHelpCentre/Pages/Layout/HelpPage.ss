@@ -87,6 +87,21 @@
 
             <h1 class="mb-6 mt-4 text-3xl font-bold text-foreground md:text-4xl">$Title</h1>
 
+            <div class="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+                <span>Last updated: $LastEdited.Nice</span>
+                <% if $AuthorName %><span>Author: $AuthorName</span><% end_if %>
+                <span>$ReadingTimeLabel</span>
+                <% if $ArticleStatus %><span>Status: $ArticleStatus</span><% end_if %>
+            </div>
+
+            <% if $TopicItems %>
+                <div class="mb-8 flex flex-wrap gap-2" aria-label="Topics">
+                    <% loop $TopicItems %>
+                        <span class="inline-flex rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">$Title</span>
+                    <% end_loop %>
+                </div>
+            <% end_if %>
+
             <%-- On-this-page table of contents --%>
             <% if $HelpContentBlocks %>
                 <nav class="mb-8 rounded-lg border border-border bg-muted/40 px-5 py-4" aria-label="On this page">
@@ -109,6 +124,38 @@
             <div>
                 $ElementalArea
             </div>
+
+            <% if $RelatedHelpPages %>
+                <section class="mt-10 rounded-lg border border-border p-5" aria-label="Related articles">
+                    <h3 class="mb-3 mt-0 text-base font-semibold text-foreground">Related articles</h3>
+                    <ul class="m-0 list-disc pl-5">
+                        <% loop $RelatedHelpPages %>
+                            <li><a class="text-primary hover:underline" href="$Link">$Title</a></li>
+                        <% end_loop %>
+                    </ul>
+                </section>
+            <% end_if %>
+
+            <section class="mt-10 rounded-lg border border-border p-5" aria-label="Article feedback">
+                <h3 class="mb-2 mt-0 text-base font-semibold text-foreground">Was this helpful?</h3>
+                <form id="js-help-feedback-form" method="post" action="$Link(feedback)">
+                    <input type="hidden" name="SecurityID" value="$SecurityID" />
+                    <div class="mb-3 flex items-center gap-4">
+                        <label class="inline-flex items-center gap-2 text-sm">
+                            <input type="radio" name="Helpful" value="yes" required />
+                            Yes
+                        </label>
+                        <label class="inline-flex items-center gap-2 text-sm">
+                            <input type="radio" name="Helpful" value="no" required />
+                            No
+                        </label>
+                    </div>
+                    <label for="js-help-feedback-comment" class="mb-1 block text-sm text-muted-foreground">Optional comment</label>
+                    <textarea id="js-help-feedback-comment" name="Comment" rows="3" class="mb-3 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"></textarea>
+                    <button type="submit" class="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm hover:bg-accent">Submit feedback</button>
+                    <p id="js-help-feedback-message" class="mt-3 text-sm" aria-live="polite"></p>
+                </form>
+            </section>
 
             <%-- Prev / Next page navigation --%>
             <nav class="mt-10 flex flex-col gap-4 border-t border-border pt-8 md:flex-row" aria-label="Page navigation">
@@ -174,6 +221,59 @@
         }, { rootMargin: '0px 0px -70% 0px' });
 
         headings.forEach(function (h) { observer.observe(h); });
+    }
+
+    if (typeof window.gtag === 'function') {
+        window.gtag('event', 'help_article_view', {
+            article_title: '$Title.JS',
+            article_status: '$ArticleStatus.JS',
+            article_url: window.location.pathname
+        });
+
+        var params = new URLSearchParams(window.location.search);
+        var query = params.get('q') || params.get('query') || params.get('search');
+        if (query) {
+            window.gtag('event', 'help_search', { search_term: query });
+        }
+
+        document.querySelectorAll('form[data-help-search-form]').forEach(function (form) {
+            form.addEventListener('submit', function () {
+                var input = form.querySelector('input[name="q"], input[name="query"], input[name="search"]');
+                if (input && input.value) {
+                    window.gtag('event', 'help_search', { search_term: input.value });
+                }
+            });
+        });
+    }
+
+    var feedbackForm = document.getElementById('js-help-feedback-form');
+    var feedbackMessage = document.getElementById('js-help-feedback-message');
+    if (feedbackForm && window.fetch) {
+        feedbackForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            var formData = new FormData(feedbackForm);
+            fetch(feedbackForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+                return response.json();
+            }).then(function (data) {
+                feedbackMessage.textContent = 'Thanks for your feedback.';
+                if (typeof window.gtag === 'function') {
+                    window.gtag('event', 'help_feedback_submitted', {
+                        helpful: data.helpful || '',
+                        article_title: '$Title.JS'
+                    });
+                }
+                feedbackForm.reset();
+            }).catch(function () {
+                feedbackMessage.textContent = 'Sorry, feedback could not be submitted.';
+            });
+        });
     }
 }());
 </script>
