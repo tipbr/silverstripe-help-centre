@@ -28,7 +28,7 @@ class HelpDeskController extends Controller
 
     public function api(HTTPRequest $request): HTTPResponse
     {
-        if (!(bool) $this->data()->config()->get('public_api_enabled')) {
+        if (!$this->data()->config()->get('public_api_enabled')) {
             return HTTPResponse::create('Not Found', 404);
         }
 
@@ -55,7 +55,7 @@ class HelpDeskController extends Controller
                     'title' => (string) $page->Title,
                     'menu_title' => (string) ($page->MenuTitle ?: $page->Title),
                     'link' => (string) $page->Link(),
-                    'summary' => trim(strip_tags((string) $page->Content ?? '')),
+                    'content' => trim(strip_tags((string) ($page->Content ?? ''))),
                     'author_name' => (string) $page->AuthorName,
                     'reading_time_label' => (string) $page->ReadingTimeLabel(),
                     'article_status' => (string) $page->ArticleStatus,
