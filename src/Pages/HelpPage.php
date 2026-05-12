@@ -2,8 +2,7 @@
 
 namespace Tipbr\HelpCentre\Pages;
 
-use Tipbr\HelpCentre\Blocks\HelpContentBlock;
-use Page;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\ListboxField;
@@ -13,12 +12,13 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataList;
+use Tipbr\HelpCentre\Blocks\HelpContentBlock;
 use Tipbr\HelpCentre\Model\HelpPageFeedback;
 
-class HelpPage extends Page
+class HelpPage extends SiteTree
 {
-    private const int DEFAULT_RELATED_ARTICLE_LIMIT = 4;
-    private const int DEFAULT_WORDS_PER_MINUTE = 200;
+    private const DEFAULT_RELATED_ARTICLE_LIMIT = 4;
+    private const DEFAULT_WORDS_PER_MINUTE = 200;
     private ?string $readingTimeLabelCache = null;
 
     private static string $table_name    = 'HelpCentre_HelpPage';
@@ -47,6 +47,14 @@ class HelpPage extends Page
     
     private static bool $can_be_root = false;
 
+    /**
+     * Get all HelpPages (typed for IDE support).
+     */
+    public static function getAll(): DataList
+    {
+        return DataList::create(self::class);
+    }
+
     public function getCMSFields(): FieldList
     {
         $fields = parent::getCMSFields();
@@ -63,7 +71,7 @@ class HelpPage extends Page
                 ->setDescription('Comma-separated topics, e.g. billing, setup, api'),
         ]);
 
-        $relatedSource = self::get()->exclude('ID', (int) $this->ID)->sort('Title')->map('ID', 'Title')->toArray();
+        $relatedSource = self::getAll()->exclude('ID', (int) $this->ID)->sort('Title')->map('ID', 'Title')->toArray();
         $fields->addFieldToTab(
             'Root.HelpMetadata',
             ListboxField::create('RelatedArticles', 'Related articles', $relatedSource)
@@ -78,11 +86,11 @@ class HelpPage extends Page
     public function HelpDesk(): ?HelpDesk
     {
         $section = $this->Parent();
-        if (!($section instanceof HelpSection)) {
-            return null;
+        if ($section instanceof HelpSection) {
+            $desk = $section->Parent();
+            return ($desk instanceof HelpDesk) ? $desk : null;
         }
-        $desk = $section->Parent();
-        return ($desk instanceof HelpDesk) ? $desk : null;
+        return null;
     }
 
     /**
@@ -126,10 +134,10 @@ class HelpPage extends Page
     {
         $area = $this->ElementalArea();
         if (!$area || !$area->exists()) {
-            return HelpContentBlock::get()->where('1 = 0');
+            return HelpContentBlock::getAll()->where('1 = 0');
         }
 
-        return HelpContentBlock::get()->filter([
+        return HelpContentBlock::getAll()->filter([
             'ParentID' => $area->ID,
         ])->sort('Sort');
     }
@@ -226,7 +234,7 @@ class HelpPage extends Page
         $existingIds[] = (int) $this->ID;
 
         $scores = [];
-        foreach (self::get()->exclude('ID', $existingIds) as $candidate) {
+        foreach (self::getAll()->exclude('ID', $existingIds) as $candidate) {
             $overlap = array_intersect($currentTopics, $candidate->TopicList());
             if ($overlap) {
                 $scores[] = [

@@ -2,10 +2,10 @@
 
 namespace Tipbr\HelpCentre\Pages;
 
-use PageController;
+use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
 
-class HelpDeskController extends PageController
+class HelpDeskController extends Controller
 {
     public function index(): HTTPResponse|array
     {
