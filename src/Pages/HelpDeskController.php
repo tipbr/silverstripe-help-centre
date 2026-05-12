@@ -55,7 +55,7 @@ class HelpDeskController extends Controller
                     'title' => (string) $page->Title,
                     'menu_title' => (string) ($page->MenuTitle ?: $page->Title),
                     'link' => (string) $page->Link(),
-                    'content' => trim(strip_tags((string) ($page->Content ?? ''))),
+                    'content_html' => (string) ($page->Content ?? ''),
                     'author_name' => (string) $page->AuthorName,
                     'reading_time_label' => (string) $page->ReadingTimeLabel(),
                     'article_status' => (string) $page->ArticleStatus,
@@ -83,7 +83,7 @@ class HelpDeskController extends Controller
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         if ($payload === false) {
-            return HTTPResponse::create('Failed to encode response', 500);
+            return HTTPResponse::create('Failed to encode response: ' . json_last_error_msg(), 500);
         }
 
         $response = HTTPResponse::create($payload, 200);
