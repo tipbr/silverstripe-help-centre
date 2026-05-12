@@ -59,7 +59,7 @@ class HelpDeskController extends Controller
                     'author_name' => (string) $page->AuthorName,
                     'reading_time_label' => (string) $page->ReadingTimeLabel(),
                     'article_status' => (string) $page->ArticleStatus,
-                    'topics' => $page->TopicList(),
+                    'topics' => array_values((array) $page->TopicList()),
                 ];
             }
 
