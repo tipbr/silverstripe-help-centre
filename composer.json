@@ -1,0 +1,37 @@
+{
+  "name": "tipbr/silverstripe-help-centre",
+  "description": "Reusable Silverstripe help centre pages and Elemental content block",
+  "type": "silverstripe-vendormodule",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "silverstripe",
+    "help-centre",
+    "cms",
+    "elemental"
+  ],
+  "require": {
+    "php": "^8.3",
+    "silverstripe/framework": "^6",
+    "silverstripe/cms": "^6",
+    "dnadesign/silverstripe-elemental": "^6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tipbr\\HelpCentre\\Pages\\": "src/Pages/",
+      "Tipbr\\HelpCentre\\Blocks\\": "src/Blocks/",
+      "Tipbr\\HelpCentre\\Model\\": "src/Model/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "silverstripe/vendor-plugin": true
+    },
+    "platform": {
+      "php": "8.3.31"
+    }
+  },
+  "extra": {
+    "expose": []
+  }
+}
