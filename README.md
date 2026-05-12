@@ -8,6 +8,7 @@ Reusable Silverstripe 6 module for documentation/help-centre sites using page ty
 - Article navigation: sidebar, breadcrumbs, in-page ToC, previous/next links
 - Optional article metadata: author, status, reading time, topics, related articles
 - Feedback endpoint (`POST /feedback`) with CSRF validation and comment length limit
+- Optional public JSON endpoint for helpdesk structure (`GET /{helpdesk-link}/api`)
 - Elemental blocks:
   - `HelpContentBlock` (section + anchor)
   - `HelpFaqBlock` (FAQ item)
@@ -35,6 +36,29 @@ vendor/bin/sake dev/build flush=all
 3. Add `Help Page` pages under each section.
 4. Add Help blocks (`Help Content`, `Help FAQ`, `Help Callout`) to each article.
 5. Configure metadata and related articles in the `Help Metadata` tab.
+
+## Public API endpoint
+
+You can expose a read-only public endpoint for the helpdesk tree (sections + pages).
+
+Enable it in YAML:
+
+```yml
+Tipbr\HelpCentre\Pages\HelpDesk:
+  public_api_enabled: true
+```
+
+Then run:
+
+```bash
+vendor/bin/sake dev/build flush=all
+```
+
+Endpoint format:
+
+- `GET /{your-helpdesk-page}/api`
+
+When disabled (default), the endpoint returns `404`.
 
 ## Templates to override
 

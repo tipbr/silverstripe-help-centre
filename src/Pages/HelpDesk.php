@@ -15,4 +15,12 @@ class HelpDesk extends SiteTree
     private static array $db = [];
 
     private static array $allowed_children = [HelpSection::class];
+
+    /**
+     * Enable a public JSON endpoint at /{helpdesk-link}/api.
+     * Configure via YAML:
+     * Tipbr\HelpCentre\Pages\HelpDesk:
+     *   public_api_enabled: true
+     */
+    private static bool $public_api_enabled = false;
 }
