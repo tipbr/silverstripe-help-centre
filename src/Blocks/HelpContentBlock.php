@@ -6,6 +6,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\ORM\DataList;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 
 class HelpContentBlock extends BaseElement
@@ -19,6 +20,14 @@ class HelpContentBlock extends BaseElement
         'Title'   => 'Varchar(255)',
         'Content' => 'HTMLText',
     ];
+
+    /**
+     * Get all HelpContentBlocks (typed for IDE support).
+     */
+    public static function getAll(): DataList
+    {
+        return DataList::create(self::class);
+    }
 
     public function getCMSFields(): FieldList
     {

@@ -2,9 +2,9 @@
 
 namespace Tipbr\HelpCentre\Pages;
 
-use Page;
+use SilverStripe\CMS\Model\SiteTree;
 
-class HelpDesk extends Page
+class HelpDesk extends SiteTree
 {
     private static string $table_name    = 'HelpCentre_HelpDesk';
     private static string $singular_name = 'Help Desk';

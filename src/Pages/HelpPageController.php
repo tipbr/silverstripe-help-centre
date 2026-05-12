@@ -2,15 +2,15 @@
 
 namespace Tipbr\HelpCentre\Pages;
 
-use PageController;
+use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Security\SecurityToken;
 use Tipbr\HelpCentre\Model\HelpPageFeedback;
 
-class HelpPageController extends PageController
+class HelpPageController extends Controller
 {
-    private const int MAX_COMMENT_LENGTH = 2000;
+    private const MAX_COMMENT_LENGTH = 2000;
 
     private static array $allowed_actions = [
         'feedback',
