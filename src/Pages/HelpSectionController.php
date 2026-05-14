@@ -2,9 +2,9 @@
 
 namespace Tipbr\HelpCentre\Pages;
 
-use SilverStripe\Control\Controller;
+use SilverStripe\CMS\Controllers\ContentController;
 
-class HelpSectionController extends Controller
+class HelpSectionController extends ContentController
 {
     public function index(): array
     {

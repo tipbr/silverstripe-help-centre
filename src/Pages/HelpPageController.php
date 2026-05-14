@@ -2,13 +2,13 @@
 
 namespace Tipbr\HelpCentre\Pages;
 
-use SilverStripe\Control\Controller;
+use SilverStripe\CMS\Controllers\ContentController;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Security\SecurityToken;
 use Tipbr\HelpCentre\Model\HelpPageFeedback;
 
-class HelpPageController extends Controller
+class HelpPageController extends ContentController
 {
     private const MAX_COMMENT_LENGTH = 2000;
 
