@@ -1,0 +1,16 @@
+---
+Name: tipbr-help-centre-elemental
+After:
+  - '#elementalconfig'
+---
+Tipbr\HelpCentre\Pages\HelpDesk:
+  extensions:
+    - DNADesign\Elemental\Extensions\ElementalPageExtension
+
+Tipbr\HelpCentre\Pages\HelpSection:
+  extensions:
+    - DNADesign\Elemental\Extensions\ElementalPageExtension
+
+Tipbr\HelpCentre\Pages\HelpPage:
+  extensions:
+    - DNADesign\Elemental\Extensions\ElementalPageExtension
